@@ -9,7 +9,6 @@ const getAllBooksHandler = (request, h) => {
     const filteredBooks = booksDB.filter((book) => {
         let isBookMatched = true;
 
-        // Filtering by book name if the name query parameter is present
         if (
             name &&
             book.name &&
@@ -21,19 +20,11 @@ const getAllBooksHandler = (request, h) => {
             isBookMatched = false;
         }
 
-        // Filtering by reading status if the reading query parameter is present
-        if (
-            reading !== undefined &&
-            book.reading !== (reading === "1")
-        ) {
+        if (reading !== undefined && book.reading !== (reading === "1")) {
             isBookMatched = false;
         }
 
-        // Filtering by finished status if the finished query parameter is present
-        if (
-            finished !== undefined &&
-            book.finished !== (finished === "1")
-        ) {
+        if (finished !== undefined && book.finished !== (finished === "1")) {
             isBookMatched = false;
         }
 
@@ -41,14 +32,12 @@ const getAllBooksHandler = (request, h) => {
     });
 
     const books = filteredBooks.map((book) => ({
-        id: booksDB.id,
-        name: booksDB.name,
-        publisher: booksDB.publisher,
+        id: book.id,
+        name: book.name,
+        publisher: book.publisher,
     }));
 
-    const response = h
-        .response({ status: "success", data: { books } })
-        .code(200);
+    const response = h.response({ status: "success", data: { books } });
 
     return response;
 };
@@ -68,9 +57,7 @@ const getBookByIdHandler = (request, h) => {
 
     const book = booksDB.filter((book) => book.id === bookId)[0];
 
-    const response = h
-        .response({ status: "success", data: { book } })
-        .code(200);
+    const response = h.response({ status: "success", data: { book } });
 
     return response;
 };
@@ -115,22 +102,22 @@ const addBookHandler = (request, h) => {
     const is_finish = pageCount === readPage;
 
     const insertedAt = new Date().toISOString();
-    const updateAt = insertedAt;
+    const updatedAt = insertedAt;
 
     const newBook = {
         id,
         name,
-        year: int(year),
+        year: parseInt(year),
         author,
         summary,
         publisher,
-        pageCount: int(pageCount),
-        readPage: int(readPage),
+        pageCount: parseInt(pageCount),
+        readPage: parseInt(readPage),
         finished: is_finish,
         reading,
         readPage,
         insertedAt,
-        updateAt,
+        updatedAt,
     };
 
     booksDB.push(newBook);
@@ -213,12 +200,10 @@ const updateBookByIdhandler = (request, h) => {
         updateAt,
     };
 
-    const response = h
-        .response({
-            status: "success",
-            message: "Buku berhasil diperbarui",
-        })
-        .code(200);
+    const response = h.response({
+        status: "success",
+        message: "Buku berhasil diperbarui",
+    });
 
     return response;
 };
@@ -244,7 +229,7 @@ const deleteBookByIdHandler = (request, h) => {
     const response = h.response({
         status: "success",
         message: "Buku berhasil dihapus",
-    }).code(200);
+    });
 
     return response;
 };
