@@ -1,7 +1,6 @@
 const { nanoid } = require("nanoid");
 const booksDB = require("./books");
-
-const getIndex = (bookId) => booksDB.findIndex((book) => book.id == bookId);
+const { getIndex } = require("./helpers");
 
 const getAllBooksHandler = (request, h) => {
     const { name, reading, finished } = request.query;
